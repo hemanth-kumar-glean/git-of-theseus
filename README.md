@@ -1,5 +1,3 @@
-[![pypi badge](https://img.shields.io/pypi/v/git-of-theseus.svg?style=flat)](https://pypi.python.org/pypi/git-of-theseus)
-
 Some scripts to analyze Git repos. Produces cool looking graphs like this (running it on [git](https://github.com/git/git) itself):
 
 ![git](https://raw.githubusercontent.com/erikbern/git-of-theseus/master/pics/git-git.png)
@@ -7,17 +5,36 @@ Some scripts to analyze Git repos. Produces cool looking graphs like this (runni
 Installing
 ----------
 
-Run `pip install git-of-theseus`
+### Rust (default)
+
+From this repository:
+
+```shell
+cargo install --path rust --locked
+```
+
+This installs:
+
+- `git-of-theseus-analyze`
+- `git-of-theseus-stack-plot`
+- `git-of-theseus-line-plot`
+- `git-of-theseus-survival-plot`
+
+You can also run without installing:
+
+```shell
+cargo run --manifest-path rust/Cargo.toml -- analyze <path to repo>
+```
 
 Running
 -------
 
-First, you need to run `git-of-theseus-analyze <path to repo>` (see `git-of-theseus-analyze --help` for a bunch of config). This will analyze a repository and might take quite some time.
+First, run `git-of-theseus-analyze <path to repo>` (see `git-of-theseus-analyze --help` for config). This analyzes a repository and might take quite some time.
 
 After that, you can generate plots! Some examples:
 
-1. Run `git-of-theseus-stack-plot cohorts.json` will create a stack plot showing the total amount of code broken down into cohorts (what year the code was added)
-1. Run `git-of-theseus-line-plot authors.json --normalize` will show a plot of the % of code contributed by the top 20 authors
+1. Run `git-of-theseus-stack-plot cohorts.json` to create a stack plot showing total code broken down into cohorts (what year code was added)
+1. Run `git-of-theseus-line-plot authors.json --normalize` to show the % of code contributed by top authors
 1. Run `git-of-theseus-survival-plot survival.json`
 
 You can run `--help` to see various options.
@@ -27,7 +44,13 @@ If you want to plot multiple repositories, have to run `git-of-theseus-analyze` 
 Help
 ----
 
-`AttributeError: Unknown property labels` – upgrade matplotlib if you are seeing this. `pip install matplotlib --upgrade`
+Rust CLI:
+
+- `git-of-theseus-analyze --help`
+- `git-of-theseus-stack-plot --help`
+- `git-of-theseus-line-plot --help`
+- `git-of-theseus-survival-plot --help`
+
   
 Some pics
 ---------

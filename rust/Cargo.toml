@@ -1,0 +1,36 @@
+[package]
+name = "git-of-theseus-rs"
+version = "0.1.0"
+edition = "2021"
+default-run = "git-of-theseus-rs"
+
+[dependencies]
+anyhow = "1"
+chrono = { version = "0.4", default-features = false, features = ["clock"] }
+clap = { version = "4", features = ["derive"] }
+globset = "0.4"
+indicatif = "0.17"
+plotters = "0.3"
+rayon = "1"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+[[bin]]
+name = "git-of-theseus-rs"
+path = "src/main.rs"
+
+[[bin]]
+name = "git-of-theseus-analyze"
+path = "src/bin/git-of-theseus-analyze.rs"
+
+[[bin]]
+name = "git-of-theseus-stack-plot"
+path = "src/bin/git-of-theseus-stack-plot.rs"
+
+[[bin]]
+name = "git-of-theseus-line-plot"
+path = "src/bin/git-of-theseus-line-plot.rs"
+
+[[bin]]
+name = "git-of-theseus-survival-plot"
+path = "src/bin/git-of-theseus-survival-plot.rs"

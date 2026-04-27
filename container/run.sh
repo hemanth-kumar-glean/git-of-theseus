@@ -1,10 +1,14 @@
 #!/usr/bin/env bash
 
-python /got/analyze.py /subject
+set -euo pipefail
 
-python /got/stack_plot.py --outfile=/output/stack_plot.png /got/cohorts.json
+WORKDIR="/tmp/got-data"
+mkdir -p "${WORKDIR}"
 
-CMD="python /got/survival_plot.py"
+git-of-theseus-analyze /subject --outdir "${WORKDIR}"
+git-of-theseus-stack-plot --outfile=/output/stack_plot.png "${WORKDIR}/cohorts.json"
+
+CMD="git-of-theseus-survival-plot"
 
 if [ "$GOT_SURVIVAL_YEARS" ]; then
   CMD="${CMD} --years=${GOT_SURVIVAL_YEARS}"
@@ -14,5 +18,5 @@ if [ "$GOT_SURVIVAL_FIT" ]; then
   CMD="${CMD} --exp-fit"
 fi
 
-CMD="${CMD} --outfile=/output/survival_plot.png /got/survival.json"
+CMD="${CMD} --outfile=/output/survival_plot.png ${WORKDIR}/survival.json"
 $CMD

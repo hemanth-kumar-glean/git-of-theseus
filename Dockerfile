@@ -1,15 +1,13 @@
-FROM python:2.7.12
-MAINTAINER Jim DeLois <delois@adobe.com>
+FROM rust:1
 
 COPY ./container/ /
 COPY ./ /got/
 
-RUN pip install -e /got && \
-    apt-get update -q && \
-    apt-get install -yqq git
-
-#VOLUME ["/output"]
+RUN apt-get update -q && \
+    apt-get install -yqq git && \
+    rm -rf /var/lib/apt/lists/* && \
+    cargo install --path /got/rust --locked
 
 WORKDIR /got/
 
-CMD ["python"]
+CMD ["/bin/bash"]
