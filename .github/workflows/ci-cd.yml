@@ -1,34 +1,58 @@
-name: Build and run
+name: Rust CI
 
-on: [push]
+on:
+  push:
+    paths:
+      - "rust/**"
+      - ".github/workflows/ci-cd.yml"
+  pull_request:
+    paths:
+      - "rust/**"
+      - ".github/workflows/ci-cd.yml"
 
 jobs:
-  test:
+  rust:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: rust
     steps:
-      - name: Checkout Repository
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
 
       - name: Cache cargo artifacts
         uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: rust
 
-      - name: Build binaries
-        run: cargo build --manifest-path rust/Cargo.toml --bins --locked
+      - name: Check formatting
+        run: cargo fmt --all -- --check
 
-      - name: Run tests
+      - name: Lint with clippy
+        run: cargo clippy --all-targets -- -D warnings
+
+      - name: Build
+        run: cargo build --locked --all-targets
+
+      - name: Test
+        run: cargo test --locked --all-targets
+
+      - name: Run CLI smoke checks
         run: |
           git clone https://github.com/erikbern/git-of-theseus
-          cargo run --manifest-path rust/Cargo.toml --bin git-of-theseus-analyze -- git-of-theseus --outdir got
-          cargo run --manifest-path rust/Cargo.toml --bin git-of-theseus-stack-plot -- got/cohorts.json
-          cargo run --manifest-path rust/Cargo.toml --bin git-of-theseus-stack-plot -- got/cohorts.json --normalize
-          cargo run --manifest-path rust/Cargo.toml --bin git-of-theseus-stack-plot -- got/exts.json
-          cargo run --manifest-path rust/Cargo.toml --bin git-of-theseus-stack-plot -- got/authors.json
-          cargo run --manifest-path rust/Cargo.toml --bin git-of-theseus-line-plot -- got/authors.json
-          cargo run --manifest-path rust/Cargo.toml --bin git-of-theseus-line-plot -- got/dirs.json
-          cargo run --manifest-path rust/Cargo.toml --bin git-of-theseus-survival-plot -- got/survival.json --exp-fit
-          cargo run --manifest-path rust/Cargo.toml --bin git-of-theseus-analyze -- --help
-          cargo run --manifest-path rust/Cargo.toml --bin git-of-theseus-stack-plot -- --help
-          cargo run --manifest-path rust/Cargo.toml --bin git-of-theseus-survival-plot -- --help
+          cargo run --bin git-of-theseus-analyze -- ../git-of-theseus --outdir ../got
+          cargo run --bin git-of-theseus-stack-plot -- ../got/cohorts.json
+          cargo run --bin git-of-theseus-stack-plot -- ../got/cohorts.json --normalize
+          cargo run --bin git-of-theseus-stack-plot -- ../got/exts.json
+          cargo run --bin git-of-theseus-stack-plot -- ../got/authors.json
+          cargo run --bin git-of-theseus-line-plot -- ../got/authors.json
+          cargo run --bin git-of-theseus-line-plot -- ../got/dirs.json
+          cargo run --bin git-of-theseus-survival-plot -- ../got/survival.json --exp-fit
+          cargo run --bin git-of-theseus-analyze -- --help
+          cargo run --bin git-of-theseus-stack-plot -- --help
+          cargo run --bin git-of-theseus-survival-plot -- --help
