@@ -1,2 +1,14 @@
+rust/target/
 rust-out/
 rust-out-*/
+
+# Generated analysis outputs
+/authors.json
+/cohorts.json
+/dirs.json
+/domains.json
+/exts.json
+/survival.json
+/line_plot.png
+/stack_plot.png
+/survival_plot.png

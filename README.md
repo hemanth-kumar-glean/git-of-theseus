@@ -1,26 +1,26 @@
-Some scripts to analyze Git repos. Produces cool looking graphs like this (running it on [git](https://github.com/git/git) itself):
+# Git of Theseus
+
+Analyze Git repositories and generate plots that show how code changes over time. For example, running it on [Git](https://github.com/git/git) itself produces:
 
 ![git](https://raw.githubusercontent.com/erikbern/git-of-theseus/master/pics/git-git.png)
 
 Installing
 ----------
 
-### Rust (default)
-
-From this repository:
+Git of Theseus is installed from the Rust CLI in this repository:
 
 ```shell
 cargo install --path rust --locked
 ```
 
-This installs:
+This installs the following commands:
 
 - `git-of-theseus-analyze`
 - `git-of-theseus-stack-plot`
 - `git-of-theseus-line-plot`
 - `git-of-theseus-survival-plot`
 
-You can also run without installing:
+You can also run directly from the repository without installing:
 
 ```shell
 cargo run --manifest-path rust/Cargo.toml -- analyze <path to repo>
@@ -29,7 +29,7 @@ cargo run --manifest-path rust/Cargo.toml -- analyze <path to repo>
 Running
 -------
 
-First, run `git-of-theseus-analyze <path to repo>` (see `git-of-theseus-analyze --help` for config). This analyzes a repository and might take quite some time.
+First, run `git-of-theseus-analyze <path to repo>` (see `git-of-theseus-analyze --help` for configuration options). This analyzes a repository and may take some time.
 
 After that, you can generate plots! Some examples:
 
@@ -37,14 +37,12 @@ After that, you can generate plots! Some examples:
 1. Run `git-of-theseus-line-plot authors.json --normalize` to show the % of code contributed by top authors
 1. Run `git-of-theseus-survival-plot survival.json`
 
-You can run `--help` to see various options.
+Run any command with `--help` to see its available options.
 
 If you want to plot multiple repositories, have to run `git-of-theseus-analyze` separately for each project and store the data in separate directories using the `--outdir` flag. Then you can run `git-of-theseus-survival-plot <foo/survival.json> <bar/survival.json>` (optionally with the `--exp-fit` flag to fit an exponential decay)
 
 Help
 ----
-
-Rust CLI:
 
 - `git-of-theseus-analyze --help`
 - `git-of-theseus-stack-plot --help`
